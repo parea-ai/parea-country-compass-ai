@@ -18,14 +18,17 @@ def create_agent():
     functions = [convert_to_openai_function(f) for f in tools]
     model = ChatOpenAI(model_name="gpt-3.5-turbo-0125", temperature=0).bind(functions=functions)
 
-    prompt = ChatPromptTemplate.from_messages([("system", "You are helpful but sassy assistant"),
-                                               MessagesPlaceholder(variable_name="chat_history"), ("user", "{input}"),
-                                               MessagesPlaceholder(variable_name="agent_scratchpad")])
+    prompt = ChatPromptTemplate.from_messages([
+        ("system", "You are helpful but sassy assistant"),
+        MessagesPlaceholder(variable_name="chat_history"), ("user", "{input}"),
+        MessagesPlaceholder(variable_name="agent_scratchpad")
+    ])
 
     memory = ConversationBufferWindowMemory(return_messages=True, memory_key="chat_history", k=5)
 
-    chain = RunnablePassthrough.assign(agent_scratchpad=lambda x: format_to_openai_functions(x["intermediate_steps"])
-                                       ) | prompt | model | OpenAIFunctionsAgentOutputParser()
+    chain = RunnablePassthrough.assign(
+        agent_scratchpad=lambda x: format_to_openai_functions(x["intermediate_steps"])
+    ) | prompt | model | OpenAIFunctionsAgentOutputParser()
 
     agent_executor = AgentExecutor(agent=chain, tools=tools, memory=memory, verbose=True)
 

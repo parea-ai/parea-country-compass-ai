@@ -35,7 +35,7 @@ class RequestModel(BaseModel):
 
 
 @tool(args_schema=RequestModel)
-def get_countries_by_name(path_params: PathParams, params: Optional[Params] = None):
+def get_countries_by_name(path_params: PathParams, params: Optional[Params] = None) -> dict:
     """Useful for when you need to answer questions about countries. Input should be a fully formed question."""
     base_url = f'https://restcountries.com/v3.1/name/{path_params.name}'
 

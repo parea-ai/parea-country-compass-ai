@@ -1,12 +1,19 @@
+import os
 import re
 
 import streamlit as st
-from dotenv import load_dotenv
 from PIL import Image
+from dotenv import load_dotenv
+from parea import Parea
+from parea.utils.trace_integrations.langchain import PareaAILangchainTracer
 
 from agents.conversational_agent import create_agent
 
 load_dotenv()
+
+p = Parea(api_key=os.getenv("PAREA_API_KEY"))
+
+handler = PareaAILangchainTracer()
 
 
 def display_header_and_image():
@@ -63,7 +70,7 @@ def main():
         query = st.text_input('Prompt: ', placeholder='Enter your prompt here..')
         if query:
             with st.spinner('Generating Response...'):
-                result = st.session_state.agent({'input': query})
+                result = st.session_state.agent.invoke({'input': query}, config={"callbacks": [handler]})
                 st.session_state.requests.append(query)
 
                 # Extract the URL from the result

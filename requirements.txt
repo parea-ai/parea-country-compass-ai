@@ -1,0 +1,10 @@
+openai
+streamlit
+langchain
+tiktoken
+google-search-results
+langchain-openai
+python-dotenv
+requests
+parea-ai==0.2.83
+pillow==10.2.0
