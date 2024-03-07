@@ -6,5 +6,6 @@ google-search-results
 langchain-openai
 python-dotenv
 requests
-parea-ai==0.2.83
+watchdog==4.0.0
+parea-ai==0.2.95
 pillow==10.2.0
